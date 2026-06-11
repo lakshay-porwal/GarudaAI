@@ -24,3 +24,12 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Ignore frontend application in this backend repository
+frontend/
+
+# Ignore root package files (workspace artifacts)
+/package.json
+/package-lock.json
+
+
