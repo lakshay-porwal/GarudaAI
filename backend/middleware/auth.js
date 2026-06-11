@@ -4,7 +4,13 @@ const { client } = require('../database/redis');
 async function Verify_user(req, res, next) {
     try {
 
-        const token = req.cookies.token;
+        let token = req.cookies.token;
+
+        if (!token && req.headers.authorization) {
+            token = req.headers.authorization.startsWith('Bearer ')
+                ? req.headers.authorization.substring(7)
+                : req.headers.authorization;
+        }
 
         if (!token) {
             return res.status(401).json({

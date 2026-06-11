@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
           // Clear user from state and localStorage
           setUser(null);
           localStorage.removeItem('garuda_user');
+          localStorage.removeItem('garuda_token');
         }
         return Promise.reject(error);
       }
@@ -34,8 +35,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/login', { emailID, password });
       const userData = response.data.user;
+      const token = response.data.token;
       setUser(userData);
       localStorage.setItem('garuda_user', JSON.stringify(userData));
+      if (token) {
+        localStorage.setItem('garuda_token', token);
+      }
       return { success: true };
     } catch (error) {
       console.error('Login error:', error);
@@ -57,8 +62,12 @@ export const AuthProvider = ({ children }) => {
       // 2. Perform auto-login to set JWT HTTP-only cookies
       const loginResponse = await api.post('/login', { emailID, password });
       const userData = loginResponse.data.user;
+      const token = loginResponse.data.token;
       setUser(userData);
       localStorage.setItem('garuda_user', JSON.stringify(userData));
+      if (token) {
+        localStorage.setItem('garuda_token', token);
+      }
       
       return { success: true };
     } catch (error) {
@@ -80,6 +89,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setUser(null);
       localStorage.removeItem('garuda_user');
+      localStorage.removeItem('garuda_token');
     }
   };
 

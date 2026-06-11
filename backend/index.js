@@ -156,7 +156,8 @@ app.post('/login', async (req, res) => {
         // if everything is correct
         res.status(200).json({
             message: "Login successful",
-            user
+            user,
+            token
         })
     }
     catch (err) {
