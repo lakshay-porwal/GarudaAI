@@ -144,10 +144,13 @@ app.post('/login', async (req, res) => {
         )
         // console.log(user._id);
         // add cookies for user use in login 
+        const origin = req.headers.origin;
+        const isProduction = process.env.NODE_ENV === 'production' || (origin && !origin.includes('localhost'));
         res.cookie("token", token, {
             httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'lax',
             maxAge: 60 * 60 * 1000
-
         });
 
         // if everything is correct
@@ -219,7 +222,13 @@ app.post('/logout', async (req, res) => {
             }
         );
 
-        res.clearCookie("token");
+        const origin = req.headers.origin;
+        const isProduction = process.env.NODE_ENV === 'production' || (origin && !origin.includes('localhost'));
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: isProduction ? 'none' : 'lax'
+        });
 
         res.status(200).json({
             message: "Logged out successfully"
