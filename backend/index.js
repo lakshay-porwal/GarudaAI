@@ -14,15 +14,28 @@ const Verify_user = require('./middleware/auth');
 const { client, redis_cache } = require('./database/redis')
 const ChatSession = require('./database/ChatSession');
 const Chat = require('./database/Chat');
-
-
-
 const cors = require('cors');
 
+
+
+const allowedOrigins = [  // we allow only below listed links
+    'http://localhost:5173',
+    'https://garuda-ai-z2ye.vercel.app',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true
 }));
+
+
 app.use(express.json());
 app.use(cookieParser());
 
