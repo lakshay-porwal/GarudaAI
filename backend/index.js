@@ -45,6 +45,10 @@ async function startServer() {
 startServer();
 
 
+app.get("/", (req, res) => {
+    res.send("Garuda AI Backend Running");
+});
+
 //-------------------Chat API
 app.post('/chat', Verify_user, async (req, res) => {
     try {

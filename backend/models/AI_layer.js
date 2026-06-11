@@ -50,7 +50,7 @@ async function main(userId, userPrompt, chatId) {
             {
                 role: "system",
                 content: `
-You are GopuAI, a helpful AI assistant.
+You are Garuda AI, a helpful AI assistant.
 
 Response Guidelines:
 
